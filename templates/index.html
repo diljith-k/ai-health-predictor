@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Health Predictor</title>
+</head>
+<body>
+
+    <h1>AI Health Care Prediction System</h1>
+
+    <form method="POST">
+
+        <h3>Select Symptoms:</h3>
+
+        <div style="height:300px; overflow-y:scroll; border:1px solid gray; padding:10px;">
+            {% for symptom in symptoms %}
+                <input type="checkbox" name="symptoms" value="{{ symptom }}">
+                {{ symptom }} <br>
+            {% endfor %}
+        </div>
+
+        <br>
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction is not none %}
+        <h2>Prediction: {{ prediction }}</h2>
+    {% endif %}
+
+    <p style="color:red;">
+        ⚠️ This project is for educational purposes only. 
+        Consult a doctor for real medical diagnosis.
+    </p>
+
+</body>
+</html>
