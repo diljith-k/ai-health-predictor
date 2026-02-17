@@ -2,34 +2,78 @@
 <html>
 <head>
     <title>AI Health Predictor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1f1f1f, #2c3e50);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #00c6ff;
+            border: none;
+            padding: 12px 25px;
+            color: black;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #00a2d3;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #00ff99;
+        }
+    </style>
 </head>
 <body>
 
-    <h1>AI Health Care Prediction System</h1>
+<h1>🧠 AI Health Predictor</h1>
+<p>Select your symptoms below:</p>
 
-    <form method="POST">
+<form method="POST">
+    <select name="symptoms" multiple size="8">
+        {% for symptom in symptoms %}
+        <option value="{{ symptom }}">{{ symptom }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <button type="submit">Predict</button>
+</form>
 
-        <h3>Select Symptoms:</h3>
-
-        <div style="height:300px; overflow-y:scroll; border:1px solid gray; padding:10px;">
-            {% for symptom in symptoms %}
-                <input type="checkbox" name="symptoms" value="{{ symptom }}">
-                {{ symptom }} <br>
-            {% endfor %}
-        </div>
-
-        <br>
-        <button type="submit">Predict</button>
-    </form>
-
-    {% if prediction is not none %}
-        <h2>Prediction: {{ prediction }}</h2>
-    {% endif %}
-
-    <p style="color:red;">
-        ⚠️ This project is for educational purposes only. 
-        Consult a doctor for real medical diagnosis.
-    </p>
+{% if prediction %}
+<div class="result">
+    Prediction: {{ prediction }}
+</div>
+{% endif %}
 
 </body>
 </html>
+
