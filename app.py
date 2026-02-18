@@ -21,6 +21,7 @@ symptoms_list = sorted(list(set(symptoms_list)))
 @app.route("/", methods=["GET", "POST"])
 def home():
     prediction = None
+    confidence = none
 
     if request.method == "POST":
         selected_symptoms = request.form.getlist("symptoms")
@@ -33,6 +34,7 @@ def home():
             for i, feature in enumerate(feature_names):
                 if symptom in feature:
                     input_vector[i] = 1
+        input_data = [input_vector]
 
         # Predict
         prediction = model.predict(input_data)[0]
