@@ -25,26 +25,29 @@ def home():
     symptoms = []
 
     if request.method == "POST":
-        selected_symptoms = request.form.getlist("symptoms")
+    selected_symptoms = request.form.getlist("symptoms")
 
-        # Create empty input vector
-        input_vector = [0] * len(feature_names)
+    input_vector = [0] * len(feature_names)
 
-        # Match selected symptoms with feature names
-        for symptom in selected_symptoms:
-            for i, feature in enumerate(feature_names):
-                if symptom in feature:
-                    input_vector[i] = 1
-        input_data = [input_vector]
+    for symptom in selected_symptoms:
+        for i, feature in enumerate(feature_names):
+            if symptom in feature:
+                input_vector[i] = 1
 
-        # Predict
-        prediction = model.predict([input_vector])[0]
+    # Predict
+    prediction = model.predict([input_vector])[0]
+
+    # 🔥 Calculate confidence
+    probabilities = model.predict_proba([input_vector])[0]
+    confidence = max(probabilities) * 100
 
 
-    return render_template("index.html",
-                       prediction=prediction,
-                       symptoms=symptoms_list)
-
+    return render_template(
+        "index.html",
+        prediction=prediction,
+        confidence=confidence,
+        symptoms=symptoms_list
+    )
 
 
 if __name__ == "__main__":
