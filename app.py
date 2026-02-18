@@ -41,10 +41,11 @@ def home():
         confidence = round(max(probabilities) * 100, 2)
 
 
-    return render_template("index.html", 
-                       prediction=prediction, 
-                       confidence=confidence,
+    return render_template("index.html",
+                       prediction=None,
+                       confidence=None,
                        symptoms=symptoms)
+
 
 
 if __name__ == "__main__":
