@@ -22,6 +22,7 @@ symptoms_list = sorted(list(set(symptoms_list)))
 def home():
     prediction = None
     confidence = None
+    symptoms = None
 
     if request.method == "POST":
         selected_symptoms = request.form.getlist("symptoms")
