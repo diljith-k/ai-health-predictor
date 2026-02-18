@@ -38,16 +38,12 @@ def home():
         input_data = [input_vector]
 
         # Predict
-        prediction = model.predict(input_data)[0]
-
-        probabilities = model.predict_proba(input_data)[0]
-        confidence = round(max(probabilities) * 100, 2)
+        prediction = model.predict([input_vector])[0]
 
 
     return render_template("index.html",
-                       prediction=None,
-                       confidence=None,
-                       symptoms=symptoms)
+                       prediction=prediction,
+                       symptoms=symptoms_list)
 
 
 
