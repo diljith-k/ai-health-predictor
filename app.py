@@ -22,25 +22,24 @@ symptoms_list = sorted(list(set(symptoms_list)))
 def home():
     prediction = None
     confidence = None
-    symptoms = []
 
     if request.method == "POST":
-    selected_symptoms = request.form.getlist("symptoms")
+        selected_symptoms = request.form.getlist("symptoms")
 
-    input_vector = [0] * len(feature_names)
+        # Create empty input vector
+        input_vector = [0] * len(feature_names)
 
-    for symptom in selected_symptoms:
-        for i, feature in enumerate(feature_names):
-            if symptom in feature:
-                input_vector[i] = 1
+        for symptom in selected_symptoms:
+            for i, feature in enumerate(feature_names):
+                if symptom in feature:
+                    input_vector[i] = 1
 
-    # Predict
-    prediction = model.predict([input_vector])[0]
+        # Predict
+        prediction = model.predict([input_vector])[0]
 
-    # 🔥 Calculate confidence
-    probabilities = model.predict_proba([input_vector])[0]
-    confidence = max(probabilities) * 100
-
+        # Confidence
+        probabilities = model.predict_proba([input_vector])[0]
+        confidence = max(probabilities) * 100
 
     return render_template(
         "index.html",
@@ -48,6 +47,7 @@ def home():
         confidence=confidence,
         symptoms=symptoms_list
     )
+
 
 
 if __name__ == "__main__":
