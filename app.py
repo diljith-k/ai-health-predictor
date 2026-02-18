@@ -21,7 +21,7 @@ symptoms_list = sorted(list(set(symptoms_list)))
 @app.route("/", methods=["GET", "POST"])
 def home():
     prediction = None
-    confidence = none
+    confidence = None
 
     if request.method == "POST":
         selected_symptoms = request.form.getlist("symptoms")
