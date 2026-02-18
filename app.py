@@ -35,13 +35,17 @@ def home():
                     input_vector[i] = 1
 
         # Predict
-        prediction = model.predict([input_vector])[0]
+        prediction = model.predict(input_data)[0]
 
-    return render_template(
-        "index.html",
-        prediction=prediction,
-        symptoms=symptoms_list
-    )
+        probabilities = model.predict_proba(input_data)[0]
+        confidence = round(max(probabilities) * 100, 2)
+
+
+    return render_template("index.html", 
+                       prediction=prediction, 
+                       confidence=confidence,
+                       symptoms=symptoms)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
