@@ -4,23 +4,22 @@ import os
 
 app = Flask(__name__, template_folder="../templates")
 
+# Load model safely
 model = pickle.load(open("model.pkl", "rb"))
 feature_names = pickle.load(open("features.pkl", "rb"))
 
-symptoms_list = []
-for feature in feature_names:
-    symptom = "_".join(feature.split("_")[2:])
-    symptoms_list.append(symptom.strip())
-
-symptoms_list = sorted(list(set(symptoms_list)))
+# Clean symptom names
+symptoms_list = sorted(
+    list(set("_".join(f.split("_")[2:]) for f in feature_names))
+)
 
 @app.route("/", methods=["GET", "POST"])
 def home():
     prediction = None
-    confidence = None
 
     if request.method == "POST":
         selected_symptoms = request.form.getlist("symptoms")
+
         input_vector = [0] * len(feature_names)
 
         for symptom in selected_symptoms:
@@ -29,12 +28,9 @@ def home():
                     input_vector[i] = 1
 
         prediction = model.predict([input_vector])[0]
-        probs = model.predict_proba([input_vector])[0]
-        confidence = round(max(probs) * 100, 2)
 
     return render_template(
         "index.html",
-        symptoms=symptoms_list,
         prediction=prediction,
-        confidence=confidence
+        symptoms=symptoms_list
     )
