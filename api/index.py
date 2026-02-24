@@ -4,8 +4,8 @@ import os
 
 app = Flask(
     __name__,
-    template_folder="../templates",   # important
-    static_folder="../static"
+    template_folder="templates",   # important
+    static_folder="static"
 )
 
 # -------------------------
@@ -60,4 +60,4 @@ def home():
 # Run locally
 # -------------------------
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    app.run()
