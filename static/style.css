@@ -1,0 +1,65 @@
+/* Base page style */
+body {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #ffffff;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container */
+.container {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.4);
+}
+
+/* Fade animation */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.8s ease forwards;
+}
+
+.fade-delay-1 { animation-delay: 0.2s; }
+.fade-delay-2 { animation-delay: 0.4s; }
+.fade-delay-3 { animation-delay: 0.6s; }
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Button */
+button {
+    background: #00c6ff;
+    background: linear-gradient(to right, #0072ff, #00c6ff);
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+/* Prediction box */
+.result {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(0, 255, 200, 0.15);
+    font-size: 20px;
+    text-align: center;
+}
