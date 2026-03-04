@@ -1,63 +1,56 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 import pickle
 import os
 
-app = Flask(
-    __name__,
-    template_folder="templates",   # important
-    static_folder="static"
-)
+app = Flask(__name__)
+CORS(app)
 
-# -------------------------
-# Load model safely
-# -------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-MODEL_PATH = os.path.join(BASE_DIR, "model.pkl")
-FEATURES_PATH = os.path.join(BASE_DIR, "features.pkl")
+model = pickle.load(open(os.path.join(BASE_DIR, "model.pkl"), "rb"))
+feature_names = pickle.load(open(os.path.join(BASE_DIR, "features.pkl"), "rb"))
 
-model = pickle.load(open(MODEL_PATH, "rb"))
-feature_names = pickle.load(open(FEATURES_PATH, "rb"))
 
-# -------------------------
-# Prepare symptoms list
-# -------------------------
-symptoms_list = []
-
-for feature in feature_names:
-    parts = feature.split("_")
-    symptom = "_".join(parts[2:])
-    symptoms_list.append(symptom.strip())
-
-symptoms_list = sorted(list(set(symptoms_list)))
-
-# -------------------------
-# Routes
-# -------------------------
-@app.route("/", methods=["GET", "POST"])
-def home():
-    prediction = None
-
-    if request.method == "POST":
-        selected_symptoms = request.form.getlist("symptoms")
+@app.route("/predict", methods=["POST"])
+def predict():
+    try:
+        data = request.get_json()
+        selected_symptoms = data.get("symptoms", [])
 
         input_vector = [0] * len(feature_names)
 
         for symptom in selected_symptoms:
-            for i, feature in enumerate(feature_names):
-                if symptom in feature:
-                    input_vector[i] = 1
+            if symptom in feature_names:
+                index = feature_names.index(symptom)
+                input_vector[index] = 1
 
         prediction = model.predict([input_vector])[0]
 
-    return render_template(
-        "index.html",
-        symptoms=symptoms_list,
-        prediction=prediction
-    )
+        confidence = None
+        if hasattr(model, "predict_proba"):
+            confidence = max(model.predict_proba([input_vector])[0])
 
-# -------------------------
-# Run locally
-# -------------------------
+        return jsonify({
+            "prediction": prediction,
+            "confidence": round(confidence * 100, 2) if confidence else None
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/symptoms", methods=["GET"])
+def get_symptoms():
+    return jsonify({
+        "symptoms": feature_names
+    })
+
+
+@app.route("/")
+def home():
+    return "Flask API running"
+
+
 if __name__ == "__main__":
-    app.run()
+    app.run(port=5050)
